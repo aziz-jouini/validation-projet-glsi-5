@@ -1,0 +1,160 @@
+<section id="home" class="welcome-hero">
+    <div class="container">
+      <div class="welcome-hero-txt">
+        <div class="welcome-container">
+          <p class="welcome-message">👋 Bienvenue, <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span> !</p>
+          <p class="last-connection">Dernière connexion : <span class="connection-date">{{ user.derniere_connexion }}</span></p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Popup Section for Adding Taxi -->
+    <div *ngIf="isPopupVisible" class="popup-overlay">
+      <div class="popup-content">
+        <h2>Ajouter un Nouveau Taxi</h2>
+        <form (ngSubmit)="addTaxi()">
+          <div class="form-group">
+            <label for="nom">Nom</label>
+            <select id="nom" class="form-control" [(ngModel)]="newTaxi.nom" name="nom" required>
+              <option value="BMW">BMW</option>
+              <option value="MERCEDES">MERCEDES</option>
+              <option value="AUDI">AUDI</option>
+              <option value="lamborghini">lamborghini</option>
+              <option value="camaro">camaro</option>
+              <option value="Porsche">Porsche</option>
+              <option value="ferrari">ferrari</option>
+
+              <!-- Add other options here -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="matricule">Matricule</label>
+            <input type="text" id="matricule" class="form-control" [(ngModel)]="newTaxi.matricule" name="matricule" required>
+          </div>
+          <div class="form-group">
+            <label for="prix">Prix</label>
+            <input type="number" id="prix" class="form-control" [(ngModel)]="newTaxi.prix" name="prix" required>
+          </div>
+          <div class="form-group">
+            <label for="photo">Photo du taxi</label>
+            <input type="file" id="photo" class="form-control" (change)="onFileSelected($event)">
+          </div>
+          <button type="submit" class="btn btn-success">Ajouter</button>
+        </form>
+        <button type="button" class="btn btn-danger" (click)="togglePopup()">Fermer</button>
+      </div>
+    </div>
+  
+    <!-- Sidebar Section -->
+    <div class="sidebar" [ngClass]="{ 'open': isSidebarOpen, 'closed': !isSidebarOpen }" (mouseenter)="openSidebar()" (mouseleave)="closeSidebar()">
+      <ul [ngClass]="{ 'visible': isSidebarOpen, 'hidden': !isSidebarOpen }">
+        <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
+        <li><a href="#"><i class="fas fa-cogs"></i> Paramètres</a></li>
+        <li><a href="#" class="nav-link" (click)="togglePopup()"><i class="fas fa-taxi"></i> Taxi</a></li>
+        <li><a href="#" class="nav-link" (click)="togglePopup2()"><i class="fas fa-list"></i> Liste des Taxis</a></li>
+        <li><a href="#" (click)="showReservations()"><i class="fas fa-bookmark"></i> les Réservations</a></li>
+      </ul>
+    </div>
+  
+    <!-- Popup Section for Taxi List -->
+    <div *ngIf="isPopupVisible2" class="popup-overlay">
+      <div class="popup-content">
+        <h2 class="mt-4">Liste des Taxis</h2>
+        <table class="table table-striped table-bordered mt-3">
+          <thead class="thead-dark">
+            <tr>
+              <th>Nom</th>
+              <th>Matricule</th>
+              <th>Prix</th>
+              <th>Photo</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let taxi of taxis">
+              <td>{{ taxi.nom }}</td>
+              <td>{{ taxi.matricule }}</td>
+              <td>{{ taxi.prix }} DT</td>
+              <td>
+                <!-- Remplacement des antislashs par des slashs dans le chemin de l'image -->
+                <img [src]="taxi.photo_de_taxi.replace('\\', '/')" alt="Photo du taxi" class="taxi-photo" *ngIf="taxi.photo_de_taxi">
+              </td>
+              <td>
+                <button class="btn btn-info" (click)="openViewPopup(taxi)">Voir</button>
+                <button class="btn btn-warning" (click)="openEditPopup(taxi)">Modifier</button>
+                <button class="btn btn-danger" (click)="deleteTaxi(taxi.id)">Supprimer</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" class="btn btn-danger" (click)="togglePopup2()">Fermer</button>
+      </div>
+    </div>
+    
+  
+    <!-- Edit Popup Section -->
+    <div class="popup" *ngIf="isEditPopupOpen" (click)="closeEditPopup()">
+      <div class="popup-content" (click)="$event.stopPropagation()">
+        <button class="close-button" (click)="closeEditPopup()">X</button>
+        <h2>Modifier un Taxi</h2>
+        <form (ngSubmit)="updateTaxi()">
+          <div class="form-group">
+            <label for="edit-nom">Nom</label>
+            <input type="text" id="edit-nom" class="form-control" [(ngModel)]="editTaxi.nom" name="editNom" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-matricule">Matricule</label>
+            <input type="text" id="edit-matricule" class="form-control" [(ngModel)]="editTaxi.matricule" name="editMatricule" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-prix">Prix</label>
+            <input type="number" id="edit-prix" class="form-control" [(ngModel)]="editTaxi.prix" name="editPrix" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-photo">Photo du taxi</label>
+            <input type="file" id="edit-photo" class="form-control" (change)="onFileSelected($event)">
+          </div>
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+        </form>
+      </div>
+    </div>
+  
+    <!-- View Popup Section -->
+    <div class="popup" *ngIf="isViewPopupOpen" (click)="closeViewPopup()">
+      <div class="popup-content" (click)="$event.stopPropagation()">
+        <button class="close-button" (click)="closeViewPopup()">X</button>
+        <h2>Détails du Taxi</h2>
+        <p><strong>Nom:</strong> {{ viewTaxi.nom }}</p>
+        <p><strong>Matricule:</strong> {{ viewTaxi.matricule }}</p>
+        <p><strong>Prix:</strong> {{ viewTaxi.prix }} DT</p>
+        <img [src]="viewTaxi.photo_de_taxi" alt="Photo du taxi" class="taxi-photo" *ngIf="viewTaxi.photo_de_taxi">
+      </div>
+    </div>
+    <div *ngIf="showReservationsPopup" class="popup-overlay">
+      <div class="popup-content">
+        <h2>Mes Réservations</h2>
+        <table class="taxi-table">
+          <thead>
+            <tr>
+              
+              <th>Propriétaire</th>
+              <th>Destination</th>
+              <th>Coût</th>
+              <th>Heure Départ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reservation of reservations">
+              
+              <td>{{ reservation.proprietaireNom }} {{ reservation.proprietairePrenom }}</td>
+              <td>{{ reservation.destination }}</td>
+              <td>{{ reservation.travelCost }}</td>
+              <td>{{ reservation.departureTime }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="close-btn" (click)="closeReservationsPopup()">Fermer</button>
+      </div>
+    </div>
+  </section>
+  

@@ -1,0 +1,393 @@
+<div class="top-area">
+    <div class="header-area">
+      <nav class="navbar navbar-default bootsnav navbar-sticky navbar-scrollspy" data-minus-value-desktop="70" data-minus-value-mobile="55" data-speed="1000">
+        <div class="container">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+              <i class="fa fa-bars"></i>
+            </button>
+            <a *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn" class="navbar-brand" href="index.html">Carvilla</a>
+          </div>
+          <div class="collapse navbar-collapse menu-ui-design" id="navbar-menu">
+            <ul class="nav navbar-nav navbar-right" data-in="fadeInDown" data-out="fadeOutUp">
+              <!-- Menu for Guests -->
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a routerLink="/" class="nav-link">Home</a></li>
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a href="#service">Service</a></li>
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a href="#featured-cars">Featured Cars</a></li>
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a href="#new-cars">New Cars</a></li>
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a href="#brand">Brands</a></li>
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a href="#contact">Contact</a></li>
+  
+              <!-- Login & Register for Guests -->
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a href="#" data-toggle="modal" data-target="#loginModal" class="nav-link">Login</a></li>
+              <li class="scroll" *ngIf="!isAdminLoggedIn && !isProprietaireLoggedIn && !isClientLoggedIn"><a href="#" data-toggle="modal" data-target="#registerModal" class="nav-link">Register</a></li>
+  
+              <!-- Admin Options -->
+              <li class="scroll" *ngIf="isAdminLoggedIn"><a href="#" data-toggle="modal" data-target="#userModal" class="nav-link">Utilisateurs</a></li>
+              <li class="scroll" *ngIf="isProprietaireLoggedIn"><a href="#" (click)="toggleChatbot()" class="nav-link"><i class="fas fa-comment-dots"></i> Taxi Assistant</a></li>
+              <li class="scroll" *ngIf="isAdminLoggedIn || isProprietaireLoggedIn || isClientLoggedIn"><a href="#" (click)="logout()" class="nav-link">Déconnexion</a></li>
+              <li class="scroll" *ngIf="isAdminLoggedIn || isProprietaireLoggedIn || isClientLoggedIn"><a href="#" class="nav-link" data-toggle="modal" data-target="#profileModal"><i class="fa fa-user" aria-hidden="true"></i></a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+  
+<!-- Chatbot Modal Popup -->
+<div *ngIf="isChatbotVisible" class="modal-overlay">
+    <div class="chatbot-popup">
+        <app-chatbot></app-chatbot>
+        <button (click)="closeChatbot()" class="close-chatbot">Close</button>
+    </div>
+</div>
+
+<div class="modal fade" id="motdepasseoublieModal" tabindex="-2" role="dialog"
+    aria-labelledby="motdepasseoublieModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <!-- Registration Form -->
+                <form (ngSubmit)=" resetPassword()">
+                    <div class="form-group">
+                        <label for="registerEmail">Email address</label>
+                        <input type="email" id="forgotEmail" [(ngModel)]="forgotEmail" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">changePassword</label>
+                        <input type="password" id="newPassword" [(ngModel)]="newPassword" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Reinisiaaliser</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Register Modal -->
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="welcome-title">Bienvenue sur Smart Taxi</h1>
+                <p class="login-prompt">
+                    Si vous avez déjà un compte,
+                    <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#loginModal"
+                        class="animated-link">
+                        <i class="fa fa-arrow-right"></i> Connectez-vous ici
+                    </a>
+
+                    <style>
+                        .animated-link {
+                            color: #007bff;
+                            font-size: 18px;
+                            text-decoration: none;
+                            display: inline-flex;
+                            align-items: center;
+                        }
+
+                        .animated-link:hover {
+                            color: #0056b3;
+                        }
+
+                        .animated-link i {
+                            margin-left: 5px;
+                            animation: bounce 0.5s infinite;
+                        }
+
+                        @keyframes bounce {
+
+                            0%,
+                            100% {
+                                transform: translateY(0);
+                            }
+
+                            50% {
+                                transform: translateY(-5px);
+                            }
+                        }
+                    </style>
+
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                        <!-- Prénom et Nom sur la même ligne -->
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="prenom">Prénom</label>
+                                <input type="text" id="prenom" name="prenom" [(ngModel)]="user.prenom" required />
+                            </div>
+
+                            <div class="input-field">
+                                <label for="nom">Nom</label>
+                                <input type="text" id="nom" name="nom" [(ngModel)]="user.nom" required />
+                            </div>
+                        </div>
+
+                        <!-- Email et Mot de passe sur la même ligne -->
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" [(ngModel)]="user.email" required />
+                            </div>
+
+                            <div class="input-field">
+                                <label for="mot_de_passe">Mot de passe</label>
+                                <input type="password" id="mot_de_passe" name="mot_de_passe"
+                                    [(ngModel)]="user.mot_de_passe" required />
+                            </div>
+                        </div>
+
+                        <!-- Confirmer le mot de passe et Type d'utilisateur sur la même ligne -->
+                        <div class="input-group">
+                            <div class="input-field">
+                                <label for="confirmPassword">Confirmer le mot de passe</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword"
+                                    [(ngModel)]="user.confirmPassword" required />
+                            </div>
+
+                            <div class="input-field">
+                                <label for="type">Choisissez un type</label>
+                                <select id="type" name="type" [(ngModel)]="user.type" required>
+                                    <!-- Changer 'Type' à 'type' -->
+                                    <option value="client">Client</option>
+                                    <option value="proprietaire">Propriétaire</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">S'inscrire</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="welcome-title">Bienvenue sur Smart Taxi</h1>
+
+                <style>
+                    .welcome-title {
+                        font-family: 'Roboto', sans-serif;
+                        font-size: 48px;
+                        background: linear-gradient(45deg, #5fb4ff, #7bf5fe);
+                        -webkit-background-clip: text;
+                        color: transparent;
+                        text-align: center;
+                        font-weight: bold;
+                    }
+                </style>
+
+
+
+
+
+
+
+                <p class="register-prompt">
+                    Si vous n'avez pas de compte,
+                    <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#registerModal"
+                        class="animated-link">
+                        <i class="fa fa-arrow-right"></i>inscrivez-vous ici</a>.
+                    <style>
+                        .animated-link {
+                            color: #007bff;
+                            font-size: 18px;
+                            text-decoration: none;
+                            display: inline-flex;
+                            align-items: center;
+                        }
+
+                        .animated-link:hover {
+                            color: #0056b3;
+                        }
+
+                        .animated-link i {
+                            margin-left: 5px;
+                            animation: bounce 0.5s infinite;
+                        }
+
+                        @keyframes bounce {
+
+                            0%,
+                            100% {
+                                transform: translateY(0);
+                            }
+
+                            50% {
+                                transform: translateY(-5px);
+                            }
+                        }
+                    </style>
+                </p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form (ngSubmit)="login()">
+                    <div class="form-group">
+                        <label for="loginEmail">Adresse e-mail</label>
+                        <input type="email" id="email" name="email" [(ngModel)]="email" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Mot de passe</label>
+                        <input type="password" id="password" name="password" [(ngModel)]="mot_de_passe" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                    <p class="forgot-password">
+                        <a href="#" data-toggle="modal" data-target="#motdepasseoublieModal" data-dismiss="modal"
+                            class="animated-link">
+                            <i class="fa fa-arrow-right"></i>Mot de passe oublié ?</a>
+                        <style>
+                            .animated-link {
+                                color: #007bff;
+                                font-size: 18px;
+                                text-decoration: none;
+                                display: inline-flex;
+                                align-items: center;
+                            }
+
+                            .animated-link:hover {
+                                color: #0056b3;
+                            }
+
+                            .animated-link i {
+                                margin-left: 5px;
+                                animation: bounce 0.5s infinite;
+                            }
+
+                            @keyframes bounce {
+
+                                0%,
+                                100% {
+                                    transform: translateY(0);
+                                }
+
+                                50% {
+                                    transform: translateY(-5px);
+                                }
+                            }
+                        </style>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profile Form Modal -->
+<div class="modal fade" id="profileModal" tabindex="-1" role="dialog" aria-labelledby="profileModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="profileModalLabel">Modifier Profil</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Profile Form -->
+                <form (ngSubmit)="profil()" #profileForm="ngForm" class="profile-form">
+                    <div class="form-group">
+                        <label for="firstName">Prénom</label>
+                        <input type="text" id="firstName" name="firstName" [(ngModel)]="userr.firstName" required
+                            class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Nom</label>
+                        <input type="text" id="lastName" name="lastName" [(ngModel)]="userr.lastName" required
+                            class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" [(ngModel)]="userr.email" required
+                            class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" id="password" name="password" [(ngModel)]="userr.password"
+                            class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirmer le mot de passe</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword"
+                            [(ngModel)]="userr.confirmPassword" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Modal large pour une taille plus grande -->
+      <div class="modal-content">
+        <div class="modal-header">
+            <h2>Liste des Utilisateurs <span>({{ users.length }})</span></h2>
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="users.length === 0" class="alert alert-info">Aucun utilisateur trouvé.</div>
+          <table *ngIf="users.length > 0" class="table table-striped table-bordered">
+            <thead class="thead-dark">
+              <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Dernière Connexion</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+                <div *ngIf="loading"></div>
+              <tr *ngFor="let user of users">
+                <td>{{ user.nom }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.type }}</td>
+                <!-- Formatage de la date "Dernière Connexion" -->
+                <td>{{ user.active | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                  <span class="badge" [ngClass]="user.active ? 'badge-success' : 'badge-danger'">
+                    {{ user.active ? 'Actif' : 'Inactif' }}
+                  </span>
+                </td>
+                <td>
+                  <button *ngIf="!user.active" (click)="activateUser(user.id)" class="btn btn-success btn-sm">Activer</button>
+                  <button *ngIf="user.active" (click)="deactivateUser(user.id)" class="btn btn-warning btn-sm">Désactiver</button>
+                  <button (click)="deleteUser(user.id)" class="btn btn-danger btn-sm">Supprimer</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  

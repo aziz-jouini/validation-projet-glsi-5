@@ -1,0 +1,379 @@
+.welcome-hero {
+    background-color: #007bff;
+    padding: 100px 0;
+}
+
+.welcome-hero-txt {
+    text-align: center;
+    opacity: 0; /* Initialement caché */
+    visibility: hidden; /* Cacher l'élément avant l'animation */
+    animation: fadeIn 1.5s ease-in-out forwards; /* 'forwards' pour conserver l'état final après l'animation */
+}
+
+.welcome-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.welcome-message {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.user-name {
+    color: #0a33a4; /* Vert pour le nom */
+}
+
+.last-connection {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Animation d'entrée */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 11%; /* Décale la sidebar vers le bas, ajustez selon vos besoins */
+    width: 1px;
+    height: 90%; /* La hauteur de la sidebar */
+    background-color: #7d67a2;
+    overflow: hidden;
+    transition: width 0.3s ease, top 0.3s ease; 
+
+    &.open {
+        width: 200px; /* Largeur de la sidebar lorsqu'elle est ouverte */
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        padding: 15px;
+    }
+
+    a {
+        color: #fff;
+        text-decoration: none;
+        display: block;
+    }
+}
+.thumbnail {
+    width: 150px;
+    height: auto;
+    margin: 10px;
+  }
+  .similar-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .recommendation-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 450px;
+    padding: 25px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    animation: popupSlideIn 0.5s ease-out; /* Animation d'apparition de la popup */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.recommendation-popup h2 {
+    color: #333;
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.recommendation-popup .popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.recommendation-popup input[type="file"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.recommendation-popup button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold;
+}
+
+.recommendation-popup button:hover {
+    background-color: #0056b3; /* Couleur de survol du bouton */
+}
+
+.recommendation-popup .similar-images img {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+
+
+
+.recommendation-popup .similar-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.recommendation-popup .similar-images p {
+    color: #333;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Animation pour faire apparaître la popup de manière fluide */
+@keyframes popupSlideIn {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+.recommendation-popup button.close-btn {
+    align-self: center;
+    padding: 8px 16px;
+    background-color: #ff4d4d; /* Rouge pour fermer */
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    font-weight: bold;
+}
+
+.recommendation-popup button.close-btn:hover {
+    background-color: #ff1a1a;
+}
+.taxi-advertisement {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: #cf9ac6;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    max-width: 350px;
+    text-align: center;
+    animation: fadeInUp 0.5s ease-out forwards; /* Animation d'apparition */
+}
+
+.taxi-advertisement h2 {
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.taxi-advertisement p {
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.taxi-advertisement button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.taxi-advertisement button:hover {
+    background-color: #0056b3;
+}
+
+/* Animation pour l'apparition de la publicité */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Style de la popup */
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
+    padding: 20px;
+    z-index: 1000;
+    overflow: auto;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Titre de la popup */
+  h2 {
+    font-family: 'Arial', sans-serif; /* Police sans-serif moderne */
+    font-size: 28px; /* Taille de police plus grande pour le titre */
+    font-weight: 700; /* Poids de la police en gras */
+    color: #333; /* Couleur de texte sombre pour une meilleure lisibilité */
+    text-align: center; /* Centrer le texte horizontalement */
+    margin-bottom: 20px; /* Espacement en bas du titre */
+    text-transform: uppercase; /* Transformer le texte en majuscules */
+    letter-spacing: 1px; /* Espacement entre les lettres */
+    position: relative; /* Pour positionner l'ombre si besoin */
+  }
+  
+  /* Ajouter une bordure en bas et une ombre légère */
+  h2::after {
+    content: '';
+    position: absolute;
+    width: 50%;
+    height: 2px;
+    background-color: #4CAF50; /* Couleur de la bordure */
+    bottom: -10px; /* Positionner la bordure en bas du texte */
+    left: 50%;
+    transform: translateX(-50%); /* Centrer la bordure sous le texte */
+  }
+  
+  /* Ajouter une ombre subtile derrière le texte pour le faire ressortir */
+  h2 {
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  /* Bouton de fermeture */
+  .popup .close-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+    transition: background-color 0.3s;
+  }
+  
+  .popup .close-btn:hover {
+    background-color: #d32f2f;
+  }
+  
+  /* Style de l'arrière-plan de la popup */
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  /* Style pour la table */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .table th, .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table th {
+    background-color: #f4f4f4;
+    color: #555;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  /* Style des boutons de réservation */
+  button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    opacity: 0.9;
+  }
+  
+  /* Style pour le bouton Réserver */
+  button:not(.reserved) {
+    background-color: #4CAF50; /* Couleur de fond pour réserver */
+    color: white;
+  }
+  
+  button:not(.reserved):hover {
+    background-color: #45a049;
+  }
+  
+  /* Style pour le bouton Annuler réservation */
+  button.reserved {
+    background-color: #f44336; /* Couleur de fond pour annuler */
+    color: white;
+  }
+  
+  button.reserved:hover {
+    background-color: #d32f2f;
+  }
+ 
+  

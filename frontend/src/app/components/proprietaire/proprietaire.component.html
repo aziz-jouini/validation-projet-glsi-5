@@ -1,0 +1,191 @@
+<section id="home" class="welcome-hero">
+    <div class="container">
+      <div class="welcome-hero-txt">
+        <div class="welcome-container">
+          <p class="welcome-message">👋 Bienvenue, <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span> !</p>
+          <p class="last-connection">Dernière connexion : <span class="connection-date">{{ user.derniere_connexion }}</span></p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Sidebar -->
+    <div class="sidebar" [ngClass]="{ 'open': isSidebarOpen, 'closed': !isSidebarOpen }" (mouseenter)="openSidebar()" (mouseleave)="closeSidebar()">
+      <ul [ngClass]="{ 'visible': isSidebarOpen, 'hidden': !isSidebarOpen }">
+        <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
+        <li><a href="#"><i class="fas fa-cogs"></i> Paramètres</a></li>
+        <li><a href="#" (click)="openRecommendationPopup()"><i class="fas fa-taxi"></i> Recommander un Taxi</a></li>
+        <li><a href="#" (click)="openPurchasedTaxisPopup()">Mes Taxis</a></li>
+        <li><a href="#" (click)="showReservations()"><i class="fas fa-bookmark"></i> les Réservations</a></li>
+      </ul>
+    </div>
+    
+  </section>
+  
+  <!-- Floating Taxi Recommendation Advertisement -->
+  <div class="taxi-advertisement" *ngIf="!isRecommendationPopupOpen">
+    <div class="advertisement-content">
+      <h2>Vous avez un taxi à recommander ?</h2>
+      <p>Recommandez un taxi et aidez vos amis à trouver un trajet idéal!</p>
+      <button (click)="openRecommendationPopup()">Recommandez un taxi maintenant</button>
+    </div>
+  </div>
+  
+  <!-- Recommendation Popup -->
+  <div class="recommendation-popup" *ngIf="isRecommendationPopupOpen">
+    <div class="popup-content">
+      <h2>Recommander un Taxi</h2>
+      <input type="file" (change)="onFileSelected($event)" />
+      <button (click)="sendImage()">Envoyer l'image</button>
+  
+      <div *ngIf="similarImages.length > 0">
+        <p>Images similaires :</p>
+        <div class="similar-images">
+          <img *ngFor="let image of similarImages" [src]="image" alt="Image similaire" />
+        </div>
+      </div>
+  
+      <button class="close-btn" (click)="closeRecommendationPopup()">Fermer</button>
+      <p class="login-prompt">
+        Si vous aimez un choix de notre catalogue,
+        <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#achatModal" class="animated-link">
+          <i class="fa fa-arrow-right"></i> Continuez-vous ici pour confirmer votre achat
+        </a>
+      </p>
+    </div>
+  </div>
+  
+  <!-- Purchase Modal -->
+  <div class="modal fade" id="achatModal" tabindex="-1" role="dialog" aria-labelledby="achatModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="centered-content" *ngIf="taxis && taxis.length > 0">
+          <table class="table table-striped table-bordered mt-3">
+            <thead class="thead-dark">
+              <tr>
+                <th>Nom</th>
+                <th>Matricule</th>
+                <th>Prix</th>
+                <th>Photo</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let taxi of taxis">
+                <td>{{ taxi.nom }}</td>
+                <td>{{ taxi.matricule }}</td>
+                <td>{{ taxi.prix }} DT</td>
+                <td>
+                  <img [src]="taxi.photo_de_taxi" alt="Photo du taxi" class="taxi-photo" *ngIf="taxi.photo_de_taxi" />
+                </td>
+                <td>
+                  <button (click)="acheterTaxi(user.id, taxi.id)" class="btn btn-primary">Acheter</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Styles -->
+  <style>
+    .animated-link {
+      color: #007bff;
+      font-size: 18px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .animated-link:hover {
+      color: #0056b3;
+    }
+    
+    .animated-link i {
+      margin-left: 5px;
+      animation: bounce 0.5s infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-5px);
+      }
+    }
+  </style>
+  
+  <!-- Popup pour afficher les taxis achetés -->
+  <div *ngIf="isPurchasedTaxisPopupOpen" class="popup">
+    <h2>Mes Taxis</h2>
+    <table class="table table-striped table-bordered mt-3">
+      <thead>
+        <tr>
+          <th>Nom du Propriétaire</th>
+        <th>Prénom du Propriétaire</th>
+          <th>Nom du Taxi</th>
+          <th>Matricule</th>
+          <th>Prix</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let taxi of purchasedTaxis">
+          <td>{{ taxi.proprietaire_nom }}</td>
+          <td>{{ taxi.proprietaire_prenom }}</td>
+          <td>{{ taxi.nom }}</td>
+          <td>{{ taxi.matricule }}</td>
+          <td>{{ taxi.prix }} DT</td>
+          <td>
+            <button *ngIf="!taxi.reserved" (click)="reserveTaxi(taxi.id)">Réserver</button>
+            <button *ngIf="taxi.reserved" (click)="cancelReservation(taxi.id)">Annuler Réservation</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <button class="close-btn" (click)="isPurchasedTaxisPopupOpen = false">Fermer</button>
+  </div>
+  
+ 
+  <!-- Popup/Modal for User Reservations -->
+  <div *ngIf="showReservationsPopup" class="popup">
+    <div class="popup-content">
+      <h2>Mes Réservations</h2>
+      <table class="taxi-table">
+        <thead>
+          <tr>
+           <!-- New header for Reservation ID -->
+            <th>Propriétaire</th>
+            <th>Destination</th>
+            <th>Coût</th>
+            <th>Heure Départ</th>
+            <th>Rang</th> <!-- Colonne pour afficher le rang (feedback) -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reservation of reservations">
+            <td></td> <!-- Displaying the Reservation ID -->
+            <td>{{ reservation.proprietaireNom }} {{ reservation.proprietairePrenom }}</td>
+            <td>{{ reservation.destination }}</td>
+            <td>{{ reservation.travelCost }}</td>
+            <td>{{ reservation.departureTime }}</td>
+            <td>
+              <span *ngIf="reservation.feedback">
+                <!-- Affichage du rang en fonction des feedbacks -->
+                <ng-container *ngIf="reservation.feedback && reservation.feedback.length > 0">
+                  {{ reservation.feedback[0].rank }} <!-- Afficher le rang du feedback -->
+                </ng-container>
+                <ng-container *ngIf="!reservation.feedback || reservation.feedback.length === 0">
+                  Aucune évaluation
+                </ng-container>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="close-btn" (click)="closeReservationsPopup()">Fermer</button>
+    </div>
+  </div>
+  

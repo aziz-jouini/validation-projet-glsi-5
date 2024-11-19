@@ -1,0 +1,320 @@
+/* Section d'accueil */
+.welcome-hero {
+    background-color: #007bff;
+    padding: 100px 0;
+}
+
+.welcome-hero-txt {
+    text-align: center;
+    opacity: 1; /* Définit visible immédiatement */
+    visibility: visible; /* Rendre l'élément visible dès le départ */
+    animation: fadeIn 1.5s ease-in-out forwards; /* Animation de fade-in */
+}
+
+.welcome-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.welcome-message {
+    font-size: 2em;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.user-name {
+    color: #0a33a4; /* Couleur bleue pour le nom */
+}
+
+.last-connection {
+    font-size: 1.1em;
+    color: #555;
+}
+
+/* Animation d'entrée */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 11%; /* Décale la sidebar vers le bas */
+    width: 1px; /* Initialement fermée */
+    height: 90%;
+    background-color: #7d67a2;
+    overflow: hidden;
+    transition: width 0.3s ease, top 0.3s ease;
+}
+
+.sidebar.open {
+    width: 200px; /* Largeur de la sidebar ouverte */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 15px;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+.sidebar.open li a {
+    font-size: 1.1em;
+}
+
+.sidebar.open li a:hover {
+    background-color: #5a4d79; /* Couleur au survol */
+}
+
+/* Popup Modal */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 10px; /* Ajouter un padding autour de la popup pour l'espacement */
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%; /* Réduire la largeur à 90% de l'écran pour plus d'espace autour */
+    max-width: 800px;
+    min-height: 400px; /* Assurer une hauteur minimale de la popup */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden; /* Empêche le débordement des éléments */
+}
+
+/* Table des Taxis */
+.taxi-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.taxi-table th, .taxi-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.taxi-table th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+.taxi-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.taxi-table tr:hover {
+    background-color: #e8f4e1;
+}
+
+.taxi-table td {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Bouton de fermeture de la popup */
+.close-btn {
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: #C74330;
+}
+
+/* Animation de survol des éléments de la sidebar */
+.sidebar.open li a:hover {
+    background-color: #5a4d79;
+}
+
+/* Map container styling in popup */
+.map-container {
+    height: 300px;
+    margin-bottom: 20px;
+    border-radius: 8px; /* Rounded corners */
+    overflow: hidden;
+}
+
+#map-popup {
+    width: 100%;
+    height: 100%;
+}
+
+.close-btn {
+    background-color: #FF5733;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: #C74330;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .map-container {
+        height: 250px; /* Moins de hauteur sur les petits écrans */
+    }
+    .popup-content {
+        width: 100%; /* Popup occupe toute la largeur de l'écran sur petits écrans */
+        max-width: none;
+    }
+}
+/* Style pour la publicité */
+.chatbot-ad-banner {
+    background: linear-gradient(45deg, #f0a500, #ffdd57); /* Dégradé de couleurs orange et jaune */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    animation: bounce 2s infinite, pulse 3s infinite; /* Animation de rebond et de couleur */
+    font-family: 'Arial', sans-serif; /* Police lisible */
+    font-size: 16px; /* Taille de police ajustée */
+}
+
+.chatbot-ad-banner p {
+    margin: 0;
+}
+
+/* Animation pour l'effet de "pulse" */
+@keyframes pulse {
+    0% {
+        background-color: #f0a500;
+    }
+    50% {
+        background-color: #ffdd57; /* Légère variation de couleur pour l'animation */
+    }
+    100% {
+        background-color: #f0a500;
+    }
+}
+
+/* Animation pour l'effet de "rebond" */
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+    }
+    25% {
+        transform: translateY(-10px);
+    }
+    50% {
+        transform: translateY(0);
+    }
+    75% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+.open-chatbot-link {
+    color: #ffffff;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-left: 10px;
+    background-color: #ff6f00;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.open-chatbot-link:hover {
+    background-color: #ff8c1a;
+    cursor: pointer;
+}
+
+  /* Style pour la fenêtre du chatbot */
+  .chatbot-window {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    height: 400px;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .chatbot-window .messages {
+    flex: 1;
+    overflow-y: auto;
+  }
+  
+  .chatbot-window input {
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%;
+  }
+  
+  .chatbot-window button {
+    background-color: #ff7f50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .chatbot-window button:hover {
+    background-color: #e56e3d;
+  }
+  

@@ -1,0 +1,151 @@
+<section id="home" class="welcome-hero">
+  <div class="container">
+    <div class="welcome-hero-txt">
+      <div class="welcome-container">
+        <!-- Message de bienvenue -->
+        <p class="welcome-message">👋 Bienvenue, <span class="user-name">{{ user.firstName }} {{ user.lastName }}</span> !</p>
+        <p class="last-connection">Dernière connexion : <span class="connection-date">{{ user.derniere_connexion }}</span></p>
+  
+        <!-- Publicité intégrée dans le message de bienvenue -->
+        <div class="chatbot-ad-banner">
+          <p>
+            <strong>🎉 Profitez de notre promotion exclusive!</strong>
+            Chattez avec notre assistant et obtenez 10% de réduction sur votre première réservation. 🎁
+            <a href="javascript:void(0);" (click)="toggleChatbot()" class="open-chatbot-link">Commencez maintenant</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+    <!-- Sidebar -->
+    <div class="sidebar" [ngClass]="{ 'open': isSidebarOpen, 'closed': !isSidebarOpen }" (mouseenter)="openSidebar()" (mouseleave)="closeSidebar()">
+      <ul [ngClass]="{ 'visible': isSidebarOpen, 'hidden': !isSidebarOpen }">
+        <li><a href="#" (click)="showReservations()"><i class="fas fa-bookmark"></i> Mes Réservations</a></li>
+        <li><a href="#" (click)="showAvailableTaxis()"><i class="fas fa-taxi"></i> Voir Taxis Disponibles</a></li>
+        <li><a href="#" (click)="toggleChatbot()"><i class="fas fa-comments"></i> Chatbot</a></li> <!-- Bouton pour ouvrir le chatbot -->
+        <li><a href="#"><i class="fas fa-envelope"></i> Messages</a></li>
+        <li><a href="#"><i class="fas fa-cogs"></i> Paramètres</a></li>
+      </ul>
+    </div>
+  
+    <!-- Popup/Modal for Available Taxis -->
+    <div *ngIf="showPopup" class="popup">
+      <div class="popup-content">
+        <h2>Taxis Disponibles</h2>
+        <table class="taxi-table">
+          <thead>
+            <tr>
+              <th>ID Taxi</th>
+              <th>Propriétaire</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let taxi of availableTaxis">
+              <td>{{ taxi.id }}</td>
+              <td>{{ taxi.proprietaire_nom }} {{ taxi.proprietaire_prenom }} </td>
+              <td>
+                <button (click)="openBookingPopup(taxi)">Réserver</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="close-btn" (click)="closePopup()">Fermer</button>
+      </div>
+    </div>
+  
+    <!-- Popup/Modal for Booking -->
+    <div *ngIf="showBookingPopup" class="popup">
+      <div class="popup-content">
+        <h2>Réservation Taxi</h2>
+        <p>Vous réservez un taxi pour <strong>{{ selectedTaxi.proprietaire_nom }} {{ selectedTaxi.proprietaire_prenom }}</strong> (ID: {{ selectedTaxi.id }}).</p>
+  
+        <!-- Affichage de la météo -->
+        <div *ngIf="weatherData" class="weather-info">
+          <h3>Météo Actuelle</h3>
+          <div class="weather-details">
+            <img *ngIf="weatherData.icon" 
+                 [src]="'https://cdn.weatherapi.com/weather/64x64/day/' + weatherData.icon + '.png'" 
+                 alt="Weather Icon" />
+            <p>{{ weatherData.description }}</p>
+            <p>Température: {{ weatherData.temperature }}°C</p>
+          </div>
+        </div>
+  
+        <!-- Choix de la destination et calcul du trajet -->
+        <label for="destination">Destination :</label>
+        <input type="text" id="destination" [(ngModel)]="destination" (change)="calculateRoute()"/>
+  
+  
+        <!-- Affichage du calcul du trajet -->
+        <div *ngIf="routeData">
+          <p>Distance: {{ routeData.distance }} km</p>
+          <p>Prix de la réservation: {{ routeData.price }} D</p>
+        </div>
+  
+        <!-- Carte Leaflet -->
+        <div id="map-popup" style="height: 300px; margin-top: 20px;"></div>
+  
+        <button (click)="confirmBooking()">Confirmer la réservation</button>
+        <button class="close-btn" (click)="closeBookingPopup()">Fermer</button>
+      </div>
+    </div>
+    <!-- Popup/Modal for User Reservations -->
+    
+      
+    <!-- client.component.html -->
+
+
+
+    <div *ngIf="showReservationsPopup" class="popup">
+      <div class="popup-content">
+        <h2>Mes Réservations</h2>
+        <table class="taxi-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Propriétaire</th>
+              <th>Destination</th>
+              <th>Coût</th>
+              <th>Heure Départ</th>
+              <th>Feedback</th> <!-- Add feedback column -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reservation of reservations">
+              <td>{{ reservation.reservationId }}</td>
+              <td>{{ reservation.proprietaireNom }} {{ reservation.proprietairePrenom }}</td>
+              <td>{{ reservation.destination }}</td>
+              <td>{{ reservation.travelCost }}</td>
+              <td>{{ reservation.departureTime }}</td>
+              <td>
+                <!-- Form for feedback -->
+                <input type="number" [(ngModel)]="reservation.rating" min="1" max="5" placeholder="Rating (1-5)">
+                <input type="text" [(ngModel)]="reservation.comment" placeholder="Comment">
+                <button (click)="submitFeedback(reservation.reservationId, reservation.rating, reservation.comment)">Submit Feedback</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="close-btn" (click)="closeReservationsPopup()">Fermer</button>
+      </div>
+    </div>
+    
+<!-- Chatbot avec publicité -->
+<div *ngIf="showChatbot" class="chatbot">
+  <!-- Publicité -->
+ 
+
+  <!-- Fenêtre du chatbot -->
+  <div class="chatbot-window">
+    <div class="messages">
+      <div *ngIf="chatbotResponse">
+        <p><strong>Chatbot:</strong> {{ chatbotResponse }}</p>
+      </div>
+    </div>
+    <input type="text" [(ngModel)]="userMessage" placeholder="Posez une question..." />
+    <button (click)="sendMessage()">Envoyer</button>
+  </div>
+</div>
